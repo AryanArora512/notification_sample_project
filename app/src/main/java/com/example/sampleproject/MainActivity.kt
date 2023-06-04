@@ -35,12 +35,36 @@ class MainActivity : AppCompatActivity() {
         val name=findViewById<EditText>(R.id.editname)
         val tf2=findViewById<TextView>(R.id.textView2)
         val submit=findViewById<Button>(R.id.button)
-        val nameinp=name.text
 
+
+
+
+        submit.setOnClickListener {
+
+            val nameinp=name.text
+
+            tf2.setText("hello $nameinp").toString()
+
+
+            when{
+                ContextCompat.checkSelfPermission(this,Manifest.permission.POST_NOTIFICATIONS)==
+                        PackageManager.PERMISSION_GRANTED->{
+                    createNotifChannel(nameinp)
+                }
+                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)->{
+
+                }else->{
+                requestLauncher.launch(
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            }
+            }
+        }
 
         requestLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
 
+                val nameinp=name.text
                 createNotifChannel(nameinp)
 
             }
@@ -52,30 +76,6 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
-
-
-
-        submit.setOnClickListener {
-
-
-            tf2.setText("hello $nameinp").toString()
-
-
-            when{
-                ContextCompat.checkSelfPermission(this,Manifest.permission.POST_NOTIFICATIONS)==
-                        PackageManager.PERMISSION_GRANTED->{
-                            createNotifChannel(nameinp)
-                }
-                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)->{
-
-                }else->{
-                    requestLauncher.launch(
-                        Manifest.permission.POST_NOTIFICATIONS
-                    )
-            }
-        }
-        }
 
     }
 
